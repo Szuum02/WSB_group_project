@@ -10,7 +10,7 @@ import {
   createTask,
 } from "../services/taskService";
 
-function Dashboard() {
+function Dashboard({ user, onLogout }) {
   const [selectedFilter, setSelectedFilter] = useState("todo");
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -109,7 +109,7 @@ function Dashboard() {
 
   return (
     <>
-      <Header onAddTask={handleAddTask} />
+      <Header user={user} onLogout={onLogout} onAddTask={handleAddTask} />
       <div className="dashboard">
         <div className="stats-container">
           <div

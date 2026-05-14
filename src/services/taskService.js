@@ -74,3 +74,18 @@ export const deleteTaskById = async (id) => {
 export const updateTask = async (task) => {
   return "OK";
 };
+
+export const loginUser = async (email, password) => {
+  return {
+    id: 1,
+    firstName: "Jan",
+    lastName: "Nowak",
+    email,
+  };
+};
+
+export const registerUser = async (userData) => {
+  return {
+    success: true,
+  };
+};
