@@ -1,6 +1,6 @@
 import "./Header.css";
 
-function Header() {
+function Header({ onAddTask }) {
   return (
     <header className="header">
       <div className="logo-section">
@@ -13,7 +13,9 @@ function Header() {
       </div>
 
       <div className="header-actions">
-        <button className="add-task-btn">+ Dodaj zadanie</button>
+        <button className="add-task-btn" onClick={onAddTask}>
+          + Dodaj zadanie
+        </button>
 
         <button className="logout-btn">Wyloguj</button>
       </div>
