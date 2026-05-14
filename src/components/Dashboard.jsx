@@ -1,12 +1,20 @@
 import "./Dashboard.css";
 import Header from "./Header";
 import TaskCard from "./TaskCard";
+import TaskModal from "./TaskModal";
 import { useState, useEffect } from "react";
-import { deleteTaskById, getTasks, updateTask } from "../services/taskService";
+import {
+  deleteTaskById,
+  getTasks,
+  updateTask,
+  createTask,
+} from "../services/taskService";
 
 function Dashboard() {
   const [selectedFilter, setSelectedFilter] = useState("todo");
   const [tasks, setTasks] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -50,6 +58,34 @@ function Dashboard() {
     }
   };
 
+  const handleAddTask = () => {
+    setEditingTask(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditTask = (id) => {
+    const task = tasks.find((task) => task.id === id);
+
+    setEditingTask(task);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveTask = async (taskData) => {
+    if (taskData.id) {
+      await updateTask(taskData);
+
+      setTasks((prev) =>
+        prev.map((task) => (task.id === taskData.id ? taskData : task)),
+      );
+    } else {
+      // TODO: dodać pobieranie z bazy danych
+      taskData.completed = false;
+      const newTask = await createTask(taskData);
+
+      setTasks((prev) => [...prev, newTask]);
+    }
+  };
+
   const today = new Date();
   const todoTasks = tasks.filter((task) => !task.completed).length;
   const lateTasks = tasks.filter((task) => {
@@ -73,7 +109,7 @@ function Dashboard() {
 
   return (
     <>
-      <Header />
+      <Header onAddTask={handleAddTask} />
       <div className="dashboard">
         <div className="stats-container">
           <div
@@ -123,11 +159,18 @@ function Dashboard() {
               key={task.id}
               task={task}
               onComplete={toggleComplete}
+              onEdit={handleEditTask}
               onDelete={toggleDelete}
             />
           ))}
         </div>
       </div>
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveTask}
+        task={editingTask}
+      />
     </>
   );
 }

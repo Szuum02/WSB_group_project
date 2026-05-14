@@ -62,7 +62,8 @@ export const getTasks = async () => {
   //   return response.json();
 };
 
-export const createTask = async (task) => {
+export const createTask = async (taskData) => {
+  // TODO: Update id
   return "OK";
 };
 
