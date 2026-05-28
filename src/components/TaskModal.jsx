@@ -9,6 +9,8 @@ function TaskModal({ isOpen, onClose, onSave, task }) {
   });
 
   useEffect(() => {
+    if (!isOpen) return;
+
     if (task) {
       setFormData({
         title: task.title,
@@ -22,7 +24,7 @@ function TaskModal({ isOpen, onClose, onSave, task }) {
         description: "",
       });
     }
-  }, [task]);
+  }, [task, isOpen]);
 
   if (!isOpen) return null;
 

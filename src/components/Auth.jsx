@@ -1,6 +1,6 @@
 import "./Auth.css";
 import { useState } from "react";
-import { loginUser, registerUser } from "../services/taskService";
+import { loginUser, registerUser, getAuthErrorMessage } from "../services/auth";
 
 function Auth({ onLogin }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -28,15 +28,14 @@ function Auth({ onLogin }) {
 
         onLogin(user);
       } else {
-        await registerUser(formData);
+        const user = await registerUser(formData);
 
-        alert("Konto zostało utworzone!");
-
-        setIsLogin(true);
+        onLogin(user, { type: "success", message: "Konto zostało utworzone!" });
       }
     } catch (error) {
       console.error(error);
-      alert("Wystąpił błąd");
+      const msg = getAuthErrorMessage(error);
+      alert(msg);
     }
   };
 
