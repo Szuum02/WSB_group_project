@@ -11,7 +11,10 @@ export default defineConfig({
       output: {
         // Split large vendor bundles and isolate Firebase into its own chunk
         manualChunks(id) {
-          if (id.includes("node_modules/firebase") || id.includes("@firebase")) {
+          if (
+            id.includes("node_modules/firebase") ||
+            id.includes("@firebase")
+          ) {
             return "firebase";
           }
           if (id.includes("node_modules")) {
@@ -20,5 +23,10 @@ export default defineConfig({
         },
       },
     },
+  },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./src/test/setup.js",
   },
 });
