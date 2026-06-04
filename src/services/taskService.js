@@ -1,78 +1,90 @@
-// TODO: Dodać odpowiednie api
-const API_URL = "";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc,
+  query,
+  where,
+  Timestamp,
+} from "firebase/firestore";
 
 export const getTasks = async () => {
-  const response = await fetch(API_URL);
+  try {
+    const { auth, db } = await import("../firebase");
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
 
-  if (!response.ok) {
-    throw new Error("Cannot get task from database");
+    const tasksRef = collection(db, "tasks");
+    const q = query(tasksRef, where("userId", "==", user.uid));
+    const querySnapshot = await getDocs(q);
+
+    const tasks = [];
+    querySnapshot.forEach((doc) => {
+      tasks.push({
+        id: doc.id,
+        ...doc.data(),
+      });
+    });
+
+    return tasks;
+  } catch (error) {
+    console.error("Error getting tasks:", error);
+    throw error;
   }
-  return [
-    {
-      id: 1,
-      title: "Zrobić projekt React",
-      date: "2026-05-12",
-      description: "Dokończyć dashboard aplikacji To-Do List.",
-      completed: false,
-    },
-    {
-      id: 2,
-      title: "Nauka CSS",
-      date: "2026-05-15",
-      description: "Powtórzyć flexbox oraz grid.",
-      completed: true,
-    },
-    {
-      id: 3,
-      title: "Oddać dokumentację",
-      date: "2026-05-01",
-      description: "Wysłać dokumentację projektu.",
-      completed: false,
-    },
-    {
-      id: 4,
-      title: "Nowe zadanie",
-      date: "2026-05-01",
-      description: "Coś tam coś tam",
-      completed: true,
-    },
-    {
-      id: 5,
-      title: "Nowe zadanie",
-      date: "2026-05-01",
-      description:
-        "Coś tam coś tam Coś tam coś tamCoś tam coś tam vCoś tam coś tamCoś tam coś tam  Coś tam coś tamCoś tam coś tam ",
-      completed: false,
-    },
-    {
-      id: 6,
-      title: "Nowe zadanie",
-      date: "2026-05-01",
-      description: "Coś tam coś tam",
-      completed: false,
-    },
-    {
-      id: 7,
-      title: "Nowe zadanie",
-      date: "2026-05-01",
-      description: "Coś tam coś tam",
-      completed: false,
-    },
-  ];
-  //   return response.json();
 };
 
 export const createTask = async (taskData) => {
-  // TODO: Update id
-  return "OK";
+  try {
+    const { auth, db } = await import("../firebase");
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const newTask = {
+      ...taskData,
+      userId: user.uid,
+      createdAt: Timestamp.now(),
+      completed: false,
+    };
+
+    const docRef = await addDoc(collection(db, "tasks"), newTask);
+
+    return {
+      id: docRef.id,
+      ...newTask,
+    };
+  } catch (error) {
+    console.error("Error creating task:", error);
+    throw error;
+  }
 };
 
 export const deleteTaskById = async (id) => {
-  return "OK";
+  try {
+    const { db } = await import("../firebase");
+    await deleteDoc(doc(db, "tasks", id));
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    throw error;
+  }
 };
 
 export const updateTask = async (task) => {
-  return "OK";
+  try {
+    const { id, ...updateData } = task;
+    const { db } = await import("../firebase");
+    await updateDoc(doc(db, "tasks", id), updateData);
+    return task;
+  } catch (error) {
+    console.error("Error updating task:", error);
+    throw error;
+  }
 };
 
 export const loginUser = async (email, password) => {

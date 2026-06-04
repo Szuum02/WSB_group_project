@@ -71,18 +71,21 @@ function Dashboard({ user, onLogout }) {
   };
 
   const handleSaveTask = async (taskData) => {
-    if (taskData.id) {
-      await updateTask(taskData);
+    try {
+      if (taskData.id) {
+        await updateTask(taskData);
 
-      setTasks((prev) =>
-        prev.map((task) => (task.id === taskData.id ? taskData : task)),
-      );
-    } else {
-      // TODO: dodać pobieranie z bazy danych
-      taskData.completed = false;
-      const newTask = await createTask(taskData);
+        setTasks((prev) =>
+          prev.map((task) => (task.id === taskData.id ? taskData : task)),
+        );
+      } else {
+        const newTask = await createTask(taskData);
 
-      setTasks((prev) => [...prev, newTask]);
+        setTasks((prev) => [...prev, newTask]);
+      }
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error saving task:", error);
     }
   };
 

@@ -6,5 +6,26 @@
 }
 
 body {
-  background-color: #f4f6f8;
+  background-color: #f7f7f9;
 }
+
+:root {
+  --color-blue: #8aa4d2; /* soft periwinkle */
+  --color-pink: #f7a6c2; /* pastel pink (delete) */
+  --color-yellow: #fff5a8; /* soft yellow */
+  --color-cyan: #7fd3f7; /* light cyan */
+  --color-done: #96c96b; /* green accent for done */
+ 
+  --bg: #f7f7f9;
+  --card-bg: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+ }
+ 
+ /* Light tints for stat cards */
+ :root {
+   --tint-blue: #eef6ff;
+   --tint-pink: #fff0f6;
+   --tint-yellow: #fffdf0;
+   --tint-cyan: #f0fbff;
+   --tint-done: #e8f5d8;

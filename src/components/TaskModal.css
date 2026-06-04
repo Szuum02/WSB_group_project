@@ -53,7 +53,7 @@
 }
 
 .save-btn {
-  background-color: #4f46e5;
+  background: linear-gradient(90deg, var(--color-blue), var(--color-cyan));
   color: white;
   border: none;
   padding: 10px 18px;
@@ -61,18 +61,15 @@
   cursor: pointer;
 }
 
-.save-btn:hover {
-  background-color: #4338ca;
-}
+.save-btn:hover { transform: translateY(-2px); }
 
 .cancel-btn {
-  background-color: #e5e7eb;
+  background: linear-gradient(90deg, #f3f4f6, #eef2ff);
   border: none;
   padding: 10px 18px;
   border-radius: 10px;
   cursor: pointer;
+  color: var(--muted);
 }
 
-.cancel-btn:hover {
-  background-color: #d1d5db;
-}
+.cancel-btn:hover { transform: translateY(-2px); }
